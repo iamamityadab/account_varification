@@ -1,14 +1,23 @@
-const codes = document.querySelectorAll('.code')
+const loadText = document.querySelector('.loading-text')
+const bg = document.querySelector('.bg')
 
-codes[0].focus()
+let load = 0
 
-codes.forEach((code, idx) => {
-    code.addEventListener('keydown', (e) => {
-        if(e.key >= 0 && e.key <=9) {
-            codes[idx].value = ''
-            setTimeout(() => codes[idx + 1].focus(), 10)
-        } else if(e.key === 'Backspace') {
-            setTimeout(() => codes[idx - 1].focus(), 10)
-        }
-    })
-})
+let int = setInterval(blurring, 30)
+
+function blurring() {
+  load++
+
+  if (load > 99) {
+    clearInterval(int)
+  }
+
+  loadText.innerText = `${load}%`
+  loadText.style.opacity = scale(load, 0, 100, 1, 0)
+  bg.style.filter = `blur(${scale(load, 0, 100, 30, 0)}px)`
+}
+
+
+const scale = (num, in_min, in_max, out_min, out_max) => {
+  return ((num - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min
+}
